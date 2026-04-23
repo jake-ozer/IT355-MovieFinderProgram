@@ -1,0 +1,13 @@
+# MovieFinder Data File
+# Format: Title|Year|Genre1,Genre2|Actor1,Actor2|Director|Rating|Description
+
+The Shawshank Redemption|1994|Drama|Tim Robbins,Morgan Freeman|Frank Darabont|9.3|Two imprisoned men bond over years finding solace and redemption.
+The Godfather|1972|Crime,Drama|Marlon Brando,Al Pacino|Francis Ford Coppola|9.2|The aging patriarch of an organized crime dynasty transfers control to his reluctant son.
+The Dark Knight|2008|Action,Crime|Christian Bale,Heath Ledger|Christopher Nolan|9.0|Batman faces the Joker, a criminal mastermind who seeks to unleash chaos across Gotham City.
+Inception|2010|Action,Sci-Fi|Leonardo DiCaprio,Joseph Gordon-Levitt|Christopher Nolan|8.8|A thief who steals secrets through dream-sharing is given the task of planting an idea.
+The Matrix|1999|Action,Sci-Fi|Keanu Reeves,Laurence Fishburne|Lana Wachowski|8.7|A hacker learns the true nature of reality and his role in the war against its controllers.
+Parasite|2019|Drama,Thriller|Kang-ho Song,Sun-kyun Lee|Bong Joon-ho|8.5|Greed and class discrimination threaten the relationship between two families.
+Spirited Away|2001|Animation,Family|Daveigh Chase,Suzanne Pleshette|Hayao Miyazaki|8.6|A girl wanders into a world ruled by spirits and must work to free her parents.
+Whiplash|2014|Drama,Music|Miles Teller,J.K. Simmons|Damien Chazelle|8.5|A young drummer enrolls at a cutthroat music conservatory under an abusive instructor.
+Interstellar|2014|Adventure,Sci-Fi|Matthew McConaughey,Anne Hathaway|Christopher Nolan|8.7|A team of explorers travel through a wormhole to ensure humanity's survival.
+Pulp Fiction|1994|Crime,Drama|John Travolta,Uma Thurman|Quentin Tarantino|8.9|The lives of two hitmen, a boxer, and a gangster intertwine in four tales of violence.
