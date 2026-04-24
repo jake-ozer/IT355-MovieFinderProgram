@@ -9,11 +9,12 @@
 
 package com.moviefinder;
 
-import com.moviefinder.data.MovieRepository;
-import com.moviefinder.model.Movie;
-
 import java.io.IOException;
 import java.util.List;
+
+import com.moviefinder.data.MovieRepository;
+import com.moviefinder.model.Movie;
+import com.moviefinder.ui.MoviePrinter;
 
 public class Main {
 
@@ -61,9 +62,8 @@ public class Main {
             if (results.isEmpty()) {
                 System.out.println("No movies matched your search.");
             } else {
-                for (Movie m : results) {
-                    System.out.println(m.toDisplayString());
-                }
+                MoviePrinter printer = new MoviePrinter();
+                printer.printResults(results);
             }
         } else {
             System.out.println("Loaded " + loadedCount + " movies.");
