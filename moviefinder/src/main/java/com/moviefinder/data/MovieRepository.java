@@ -4,6 +4,7 @@
  *  - CWE-200 (Exposure of Sensitive Information)
  *  - CWE-209 (Error Message Containing Sensitive Information)
  *  - CWE-252 (Unchecked Return Value)
+ *  - CWE-190 (Integer Overflow or Wraparound) -- added guidance and safe parsing
  */
 
 package com.moviefinder.data;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.moviefinder.model.Movie;
+import com.moviefinder.util.SafeInteger;
 
 /**
  * Loads movies from a flat file into memory.
@@ -67,7 +69,8 @@ public class MovieRepository {
         }
 
         String title = parts[0].trim();
-        int year = parseIntSafe(parts[1].trim(), 0);
+        // CWE-190: Use SafeInteger to avoid integer overflow or wraparound when parsing years
+        int year = SafeInteger.parseYearClamped(parts[1].trim(), 0);
         List<String> genres = splitCSV(parts[2]);
         List<String> actors = splitCSV(parts[3]);
         String director = parts[4].trim();
