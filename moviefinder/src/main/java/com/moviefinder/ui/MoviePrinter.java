@@ -9,6 +9,7 @@ package com.moviefinder.ui;
 import java.util.List;
 
 import com.moviefinder.model.Movie;
+import com.moviefinder.util.SafeMath;
 
 // CWE-1080: this class is kept small and focused, one job, print results
 public class MoviePrinter {
@@ -19,6 +20,14 @@ public class MoviePrinter {
             System.out.println("No movies found.");
             return;
         }
+
+        // CWE-369: compute average rating safely using SafeMath.safeDivide to avoid divide-by-zero
+        double total = 0.0;
+        for (Movie m : results) {
+            total += m.getRating();
+        }
+        double avg = SafeMath.safeDivide(total, results.size(), 0.0);
+        System.out.printf("Found %d movies. Average rating: %.2f%n", results.size(), avg);
 
         for (int i = 0; i < results.size(); i++) {
             // CWE-125: i is always < results.size() — bounds guaranteed by loop condition
