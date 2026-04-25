@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.moviefinder.model.Movie;
 import com.moviefinder.util.SafeInteger;
+import com.moviefinder.util.SafeConverter;
 
 /**
  * Loads movies from a flat file into memory.
@@ -74,7 +75,8 @@ public class MovieRepository {
         List<String> genres = splitCSV(parts[2]);
         List<String> actors = splitCSV(parts[3]);
         String director = parts[4].trim();
-        double rating = parseDoubleSafe(parts[5].trim(), 0.0);
+        // CWE-681: parse rating with SafeConverter to avoid incorrect numeric conversions / truncation
+        double rating = SafeConverter.parseDoubleClamped(parts[5].trim(), 0.0, 0.0, 10.0);
         String description = parts[6].trim();
 
         return new Movie(title, year, genres, actors, director, rating, description);

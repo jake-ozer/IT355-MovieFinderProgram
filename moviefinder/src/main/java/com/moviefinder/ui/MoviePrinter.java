@@ -9,6 +9,8 @@ package com.moviefinder.ui;
 import java.util.List;
 
 import com.moviefinder.model.Movie;
+import com.moviefinder.util.SafeMath;
+import com.moviefinder.util.SafeReturn;
 
 // CWE-1080: this class is kept small and focused, one job, print results
 public class MoviePrinter {
@@ -20,6 +22,14 @@ public class MoviePrinter {
             return;
         }
 
+        // CWE-369: compute average rating safely using SafeMath.safeDivide to avoid divide-by-zero
+        double total = 0.0;
+        for (Movie m : results) {
+            total += m.getRating();
+        }
+        double avg = SafeMath.safeDivide(total, results.size(), 0.0);
+        System.out.printf("Found %d movies. Average rating: %.2f%n", results.size(), avg);
+
         for (int i = 0; i < results.size(); i++) {
             // CWE-125: i is always < results.size() — bounds guaranteed by loop condition
             System.out.println(results.get(i).toDisplayString());
@@ -28,10 +38,14 @@ public class MoviePrinter {
 
     // CWE-125: explicit bounds check before accessing by index
     public void printByIndex(List<Movie> results, int index) {
-        if (index < 0 || index >= results.size()) {
+        // CWE-466: use SafeReturn.getElementSafe to avoid returning/accessing a value
+        // outside the caller's expected range. This returns null for invalid indexes
+        // which we then handle gracefully.
+        Movie m = SafeReturn.getElementSafe(results, index);
+        if (m == null) {
             System.out.println("Index out of range.");
             return;
         }
-        System.out.println(results.get(index).toDisplayString());
+        System.out.println(m.toDisplayString());
     }
 }
