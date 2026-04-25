@@ -5,6 +5,7 @@
  *  - CWE-209 (Error Message Containing Sensitive Information)
  *  - CWE-252 (Unchecked Return Value)
  *  - CWE-190 (Integer Overflow or Wraparound) -- added guidance and safe parsing
+ *  - CWE-1287 (Improper Validation of Specified Type of Input) -- added simple content-type checks
  */
 
 package com.moviefinder.data;
@@ -17,6 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.moviefinder.model.Movie;
+import com.moviefinder.service.FileUploadValidator;
+import com.moviefinder.util.FileTypeValidator;
 import com.moviefinder.util.SafeInteger;
 import com.moviefinder.util.SafeConverter;
 
@@ -41,7 +44,23 @@ public class MovieRepository {
             throw new IllegalArgumentException("File path must not be empty.");
         }
 
-        List<String> lines = Files.readAllLines(Path.of(filePath));
+        // CWE-1287: validate declared file type (extension) and also check content
+        FileUploadValidator uploadValidator = new FileUploadValidator();
+        if (!uploadValidator.isSafeFile(filePath)) {
+            throw new IllegalArgumentException("File type not allowed.");
+        }
+
+        Path p = Path.of(filePath);
+        if (!Files.exists(p) || !Files.isRegularFile(p)) {
+            throw new IllegalArgumentException("File does not exist or is not a regular file.");
+        }
+
+        // lightweight content check to avoid treating binary files as text
+        if (!FileTypeValidator.isProbablyText(p, 1024)) {
+            throw new IllegalArgumentException("File content appears to be non-text or unreadable.");
+        }
+
+        List<String> lines = Files.readAllLines(p);
         int added = 0;
 
         for (int i = 0; i < lines.size(); i++) {
