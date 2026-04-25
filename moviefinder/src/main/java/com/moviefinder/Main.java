@@ -5,6 +5,7 @@
  *  - CWE-200 (Exposure of Sensitive Information)
  *  - CWE-209 (Error Message Containing Sensitive Information)
  *  - CWE-252 (Unchecked Return Value)
+ *  - CWE-1284 (Improper Validation of Specified Quantity in Input) -- added input cap handling
  */
 
 package com.moviefinder;
@@ -15,6 +16,7 @@ import java.util.List;
 import com.moviefinder.data.MovieRepository;
 import com.moviefinder.model.Movie;
 import com.moviefinder.ui.MoviePrinter;
+import com.moviefinder.util.SafeQuantity;
 
 public class Main {
 
@@ -22,7 +24,7 @@ public class Main {
 
         // CWE-20: Validate command-line arguments
         if (args.length == 0 || args[0].trim().isEmpty()) {
-            System.out.println("Usage: java -jar moviefinder.jar <movies-file> [search term]");
+            System.out.println("Usage: java -jar moviefinder.jar <movies-file> [search term] [max-results]");
             return;
         }
 
@@ -32,6 +34,13 @@ public class Main {
         if (query.length() > 200) {
             System.out.println("Search term is too long.");
             return;
+        }
+
+        // CWE-1284: optional third argument specifies how many results to show. Validate and clamp.
+        int maxResults = 50; // default
+        if (args.length > 2) {
+            // allow between 1 and 100 results; invalid inputs fall back to default
+            maxResults = SafeQuantity.parseAndClamp(args[2], 50, 1, 100);
         }
 
         MovieRepository repo = new MovieRepository();
@@ -62,8 +71,10 @@ public class Main {
             if (results.isEmpty()) {
                 System.out.println("No movies matched your search.");
             } else {
+                // CWE-1284: protect against large user-specified quantities by slicing the list
+                List<Movie> toPrint = results.size() <= maxResults ? results : results.subList(0, maxResults);
                 MoviePrinter printer = new MoviePrinter();
-                printer.printResults(results);
+                printer.printResults(toPrint);
             }
         } else {
             System.out.println("Loaded " + loadedCount + " movies.");
