@@ -1,0 +1,10 @@
+com\moviefinder\model\Movie.class
+com\moviefinder\model\Searchable.class
+com\util\OutputEncoder.class
+com\moviefinder\ui\MoviePrinter.class
+com\moviefinder\data\MovieRepository.class
+com\moviefinder\Main.class
+com\moviefinder\model\Filterable.class
+com\moviefinder\model\MediaEntry.class
+com\moviefinder\service\MovieService.class
+com\moviefinder\service\FileUploadValidator.class

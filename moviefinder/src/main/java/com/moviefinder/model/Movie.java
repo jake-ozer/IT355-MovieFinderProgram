@@ -42,6 +42,7 @@ public class Movie extends MediaEntry {
     @Override
     public String toDisplayString() {
 
+        // CWE-480: Use of Incorrect Operator (correctly uses assignment operator, not comparison operator '==')
         String line = "-".repeat(55);
 
         // CWE-116: Escape output before displaying

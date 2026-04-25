@@ -17,7 +17,15 @@ public class MovieService {
     private final List<Movie> movies;
 
     public MovieService(List<Movie> movies) {
-        this.movies = Collections.unmodifiableList(new ArrayList<>(movies));
+        // CWE-233: Improper Handling of parameters
+        if (movies == null) {
+            throw new IllegalArgumentException("Movies list cannot be null.");
+        }
+        else
+        {
+            // CWE-374: Passing Mutable Objects to an Untrusted Method (defensive copy of the list to prevent external modification)
+            this.movies = Collections.unmodifiableList(new ArrayList<>(movies));
+        }
     }
 
     // CWE-178: normalize input to lowercase so "Action" and "action" match the same way
@@ -31,11 +39,13 @@ public class MovieService {
     public List<Movie> search(String rawQuery) {
         String query = normalizeInput(rawQuery);
 
+        // CWE-233: Improper Handling of parameters
         if (query.isEmpty()) {
             System.out.printf("%s%n", "Empty query: returning all movies.");
             return new ArrayList<>(movies);
         }
 
+        // CWE-375: Returning a Mutable Object to an Untrusted Caller (returns a new list instead of the internal movies list)
         List<Movie> results = new ArrayList<>();
         for (Movie m : movies) {
             if (m.matchesQuery(query)) {
@@ -51,6 +61,8 @@ public class MovieService {
     // CWE-178: genre is normalized before comparison
     public List<Movie> filterByGenre(String rawGenre) {
         String genre = normalizeInput(rawGenre);
+
+        // CWE-375: Returning a Mutable Object to an Untrusted Caller (returns a new list instead of the internal movies list)
         List<Movie> results = new ArrayList<>();
         for (Movie m : movies) {
             if (m.matchesGenre(genre)) {
@@ -65,6 +77,8 @@ public class MovieService {
             System.out.printf("%s%n", "Invalid year range: returning empty list.");
             return Collections.emptyList();
         }
+
+        // CWE-375: Returning a Mutable Object to an Untrusted Caller (returns a new list instead of the internal movies list)
         List<Movie> results = new ArrayList<>();
         for (Movie m : movies) {
             if (m.matchesYearRange(from, to)) {
